@@ -26,7 +26,6 @@ router.get("/reset-password/:token", async (req, res) => {
 });
 
 router.post("/update-password/:id", updatePasswordController);
-
 router.post("/register", registerController);
 router.post("/login", loginController);
 router.post("/logout", logoutController);

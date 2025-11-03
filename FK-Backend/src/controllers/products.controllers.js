@@ -27,30 +27,32 @@ const getAllProductsController = async (req, res) => {
     });
   }
 };
-
 const createProductController = async (req, res) => {
   try {
-    let { title, description, amount, currency } = req.body;
+    console.log("BODY:", req.body);
+    console.log("FILES:", req.files);
 
-    if (!req.files)
-      return res.status(404).json({
-        message: "Images is required",
+    const { title, description, amount, currency } = req.body;
+
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({
+        message: "At least one image is required",
       });
+    }
 
-    if (!title || !description || !amount || !currency)
-      return res.status(404).json({
+    if (!title || !description || !amount || !currency) {
+      return res.status(400).json({
         message: "All fields are required",
       });
+    }
 
-    let uploadedImgUrl = await Promise.all(
+    const uploadedImgUrl = await Promise.all(
       req.files.map(async (elem) => {
         return await sendFilesToStorage(elem.buffer, elem.originalname);
       })
     );
 
-    console.log(uploadedImgUrl);
-
-    let newProduct = await ProductModel.create({
+    const newProduct = await ProductModel.create({
       title,
       description,
       price: {
@@ -61,13 +63,14 @@ const createProductController = async (req, res) => {
     });
 
     return res.status(201).json({
-      message: "product created successfully",
+      message: "Product created successfully",
       product: newProduct,
     });
   } catch (error) {
+    console.log("Error creating product:", error);
     return res.status(500).json({
       message: "Internal server error",
-      error: error,
+      error,
     });
   }
 };

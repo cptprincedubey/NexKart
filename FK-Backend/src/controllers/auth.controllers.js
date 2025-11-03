@@ -6,9 +6,10 @@ const sendMail = require("../services/mail.service");
 
 const registerController = async (req, res) => {
   try {
-    let { fullname, email, password, mobile } = req.body;
 
-    if (!fullname || !email || !password || !mobile) {
+    let { fullname, email, password, mobile ,} = req.body;
+
+    if (!fullname || !email || !password || !mobile ) {
       return res.status(404).json({
         message: "All fields are required",
       });
@@ -31,12 +32,15 @@ const registerController = async (req, res) => {
     let token = newUser.generateToken();
 
     res.cookie("token", token);
-
+    console.log(req.body);
     return res.status(201).json({
+
       message: "user registered",
       user: newUser,
     });
+
   } catch (error) {
+    console.log("error in register", error);
     return res.status(500).json({
       message: "Internal server error ",
       error: error,

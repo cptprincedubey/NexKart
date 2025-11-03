@@ -6,7 +6,7 @@ const { getAllUsersController } = require("../controllers/admin.controllers");
 const {
   getAllProductsController,
   deleteProductController,
-} = require("../controllers/product.controller");
+} = require("../controllers/admin.controllers");
 
 const router = express.Router();
 
