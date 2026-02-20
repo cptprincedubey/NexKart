@@ -6,7 +6,9 @@ const {
   logoutController,
   forgotPasswordController,
   updatePasswordController,
+  meController,
 } = require("../controllers/auth.controllers");
+const authMiddleware = require("../middlewares/auth.middleware");
 
 const router = express.Router();
 
@@ -29,6 +31,7 @@ router.post("/update-password/:id", updatePasswordController);
 router.post("/register", registerController);
 router.post("/login", loginController);
 router.post("/logout", logoutController);
+router.get("/me", authMiddleware, meController);
 
 module.exports = router;
 

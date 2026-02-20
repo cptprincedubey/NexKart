@@ -156,4 +156,34 @@ module.exports = {
   getAllProductsController,
   updateProductController,
   deleteProductController,
+  getProductByIdController: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        return res.status(404).json({
+          message: "Product ID not found",
+        });
+      }
+
+      const product = await ProductModel.findById(id);
+
+      if (!product) {
+        return res.status(404).json({
+          message: "Product not found",
+        });
+      }
+
+      return res.status(200).json({
+        message: "Product fetched",
+        product: product,
+      });
+    } catch (error) {
+      console.log("error in get product by id", error);
+      return res.status(500).json({
+        message: "Internal server error",
+        error: error,
+      });
+    }
+  },
 };

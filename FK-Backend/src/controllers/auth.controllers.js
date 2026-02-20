@@ -185,4 +185,23 @@ module.exports = {
   logoutController,
   forgotPasswordController,
   updatePasswordController,
+  meController: async (req, res) => {
+    try {
+      const user = req.user;
+      if (!user) {
+        return res.status(401).json({
+          message: "Unauthorized",
+        });
+      }
+      return res.status(200).json({
+        user: user,
+      });
+    } catch (error) {
+      console.log("error in me", error);
+      return res.status(500).json({
+        message: "internal server error",
+        error: error,
+      });
+    }
+  },
 };

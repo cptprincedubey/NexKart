@@ -5,7 +5,8 @@ const authRoutes = require('./src/routes/auth.routes');
 const productRoutes = require('./src/routes/product.routes');
 const adminRoutes = require('./src/routes/admin.routes')
 const connectDB = require('./src/config/db/db');
-const catchInstance = require('./src/services/cache.service');
+const catchInstance = require('./src/services/cache.service'); 
+const cors = require('cors');
 
 connectDB();            
 
@@ -19,6 +20,12 @@ catchInstance.on("error", (error) => {
   console.log("Error connecting redis", error);
 });
 
+// CORS middleware should be before routes
+app.use(cors({
+    origin: "http://localhost:5173", 
+    credentials: true,               
+  }));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth",authRoutes);
@@ -26,7 +33,7 @@ app.use("/api/products",productRoutes);
 app.use("/api/admin",adminRoutes);
 
 
-let port = process.env.PORT || 4500;
+let port = process.env.PORT || 3000;
 
 app.listen(port, ()=>{
     console.log(`server is running on port ${port}`);
